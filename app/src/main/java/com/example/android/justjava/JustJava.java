@@ -60,15 +60,32 @@ public class JustJava extends AppCompatActivity {
     public void decrement (View view) {
         if (number == 0) {
             String quantity = itemCount + number;
-            adjustPrice(price * number);
+            if (whippedCream() && chocolate()) {
+                adjustPrice((price + 1 + 2) * number);
+            } else if (whippedCream()) {
+                adjustPrice((price + 1) * number)
+            } else if (chocolate()) {
+                adjustPrice((price + 2) * number)
+            } else {
+                adjustPrice(price * number);
+            }
             display(quantity);
             TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
             thankYouMessage.setText("");
+            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
         } else {
             number--;
             String quantity = itemCount + number;
             display(quantity);
-            adjustPrice(price * number);
+            if (whippedCream() && chocolate()) {
+                adjustPrice((price + 1 + 2) * number);
+            } else if (whippedCream()) {
+                adjustPrice((price + 1) * number)
+            } else if (chocolate()) {
+                adjustPrice((price + 2) * number)
+            } else {
+                adjustPrice(price * number);
+            }
             TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
             thankYouMessage.setText("");
         }
@@ -82,11 +99,29 @@ public class JustJava extends AppCompatActivity {
 
                 thankYouMessage.setText("Please enter a name...");
             } else {
+                if (whippedCream() && chocolate()) {
+                    adjustPrice((price + 1 + 2) * number);
+                } else if (whippedCream()) {
+                    adjustPrice((price + 1) * number)
+                } else if (chocolate()) {
+                    adjustPrice((price + 2) * number)
+                } else {
+                    adjustPrice(price * number);
+                }
 
-                adjustPrice(price * number);
-                thankYouMessage.setText("Thank you for your order, " + name() +
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_EMAIL, "mkmorfess@gmail.com");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "New Coffee Order");
+                intent.putExtra(Intent.EXTRA_STREAM, name() +
+                        "\nNumber of coffees: " + number +
                         "\nWhipped Cream? " + whippedCream() +
                         "\nChocolate? " + chocolate());
+                if (intent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(intent);
+                }
+
+                thankYouMessage.setText("Thank you for your order, " + name()
                 number = 0;
                 String quantity = itemCount + number;
                 display(quantity);
