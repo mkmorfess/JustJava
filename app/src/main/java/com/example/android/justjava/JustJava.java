@@ -1,31 +1,37 @@
 package com.example.android.justjava;
 
-
-
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import java.text.DecimalFormat;
+import android.content.Intent;
+import android.net.Uri;
 
 /**
  * This app displays an order form to order coffee.
  */
+
 public class JustJava extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_just_java);
+
+        thankYouMessage = (TextView) findViewById(R.id.thank_you);
     }
 
-    private static DecimalFormat df2 = new DecimalFormat(".##");
+//    private static DecimalFormat df2 = new DecimalFormat(".##");
 
     int number = 0;
     int price = 5;
     String itemCount = "Item Count: ";
+    public TextView thankYouMessage;
+
     /**
      * This method is called when the order button is clicked.
      */
@@ -49,85 +55,84 @@ public class JustJava extends AppCompatActivity {
 
 
     public void increment (View view) {
-        number++;
-        String quantity = itemCount + number;
-        display(quantity);
-        adjustPrice(price * number);
-        TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
         thankYouMessage.setText("");
+        if (number > 100) {
+            String quantity = itemCount + number;
+            display(quantity);
+
+            Toast.makeText(this, "You cannot have more than 100 coffee", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            number++;
+            String quantity = itemCount + number;
+            display(quantity);
+            adjustPrice(price * number);
+        }
     }
 
     public void decrement (View view) {
+        thankYouMessage.setText("");
         if (number == 0) {
             String quantity = itemCount + number;
-            if (whippedCream() && chocolate()) {
-                adjustPrice((price + 1 + 2) * number);
-            } else if (whippedCream()) {
-                adjustPrice((price + 1) * number);
-            } else if (chocolate()) {
-                adjustPrice((price + 2) * number);
-            } else {
-                adjustPrice(price * number);
-            }
             display(quantity);
-            TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
-            thankYouMessage.setText("");
-//            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+
+            Toast.makeText(this, "Please press the '+' to add coffees", Toast.LENGTH_SHORT).show();
         } else {
             number--;
             String quantity = itemCount + number;
             display(quantity);
-            if (whippedCream() && chocolate()) {
-                adjustPrice((price + 1 + 2) * number);
-            } else if (whippedCream()) {
-                adjustPrice((price + 1) * number);
-            } else if (chocolate()) {
-                adjustPrice((price + 2) * number);
-            } else {
-                adjustPrice(price * number);
-            }
-            TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
-            thankYouMessage.setText("");
+            adjustPrice(price * number);
         }
     }
     public void submitOrder(View view) {
-        TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
+        String quantity = itemCount + number;
         if (number == 0) {
-            thankYouMessage.setText("Quantity must be greater than 0 if you want to place an order");
+
+            Toast.makeText(this, "You cannot order 0 cups of coffee... ", Toast.LENGTH_SHORT).show();
+
         } else {
+
             if (name().length() == 0) {
 
-                thankYouMessage.setText("Please enter a name...");
+                Toast.makeText(this, getString(R.string.name), Toast.LENGTH_SHORT).show();
             } else {
+                int newCost;
                 if (whippedCream() && chocolate()) {
                     adjustPrice((price + 1 + 2) * number);
+                    newCost = (price + 1 + 2) * number;
                 } else if (whippedCream()) {
                     adjustPrice((price + 1) * number);
+                    newCost = (price + 1) * number;
                 } else if (chocolate()) {
                     adjustPrice((price + 2) * number);
+                    newCost = (price + 2) * number;
                 } else {
                     adjustPrice(price * number);
+                    newCost = price * number;
                 }
 
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setType("*/*");
-                intent.putExtra(Intent.EXTRA_EMAIL, "mkmorfess@gmail.com");
-                intent.putExtra(Intent.EXTRA_SUBJECT, "New Coffee Order");
-                intent.putExtra(Intent.EXTRA_STREAM, name() +
+                String priceMessage = "Total: $" + newCost +
+                        "\nName: " + name() +
                         "\nNumber of coffees: " + number +
                         "\nWhipped Cream? " + whippedCream() +
-                        "\nChocolate? " + chocolate());
+                        "\nChocolate? " + chocolate();
+                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                intent.setData(Uri.parse("mailto:")); // only email apps should handle this
+                intent.putExtra(Intent.EXTRA_EMAIL, "mkmorfess@gmail.com");
+                intent.putExtra(Intent.EXTRA_SUBJECT, "Just Java Coffee Order");
+                intent.putExtra(Intent.EXTRA_TEXT, priceMessage);
                 if (intent.resolveActivity(getPackageManager()) != null) {
                     startActivity(intent);
                 }
 
                 thankYouMessage.setText("Thank you for your order, " + name());
                 number = 0;
-                String quantity = itemCount + number;
+
                 display(quantity);
             }
         }
     }
+
 
     /**
      * This method displays the given quantity value on the screen.

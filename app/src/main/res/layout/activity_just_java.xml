@@ -33,7 +33,7 @@
                 android:text="Quantity"
                 android:textAllCaps="true"
                 android:layout_marginBottom="16dp"
-                android:textSize="16sp"/>
+                style="@style/Header"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,15 +71,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Toppings"
+                android:text="@string/toppings"
                 android:textAllCaps="true"
                 android:layout_marginBottom="16dp"
-                android:textSize="16sp"/>
+                style="@style/Header"/>
 
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Whipped Cream"
+                android:text="Whipped Cream  ($1 per cup)"
                 android:textSize="16dp"
                 android:paddingLeft="24dp"
                 android:layout_marginBottom="16dp"
@@ -88,7 +88,7 @@
             <CheckBox
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Chocolate"
+                android:text="Chocolate ($2 per cup)"
                 android:textSize="16dp"
                 android:paddingLeft="24dp"
                 android:layout_marginBottom="16dp"
@@ -101,7 +101,7 @@
                 android:text="Price"
                 android:textAllCaps="true"
                 android:layout_marginBottom="16dp"
-                android:textSize="16sp"/>
+                style="@style/Header"/>
 
             <TextView
                 android:id="@+id/price_text_view"
