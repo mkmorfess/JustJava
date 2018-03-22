@@ -63,16 +63,16 @@ public class JustJava extends AppCompatActivity {
             if (whippedCream() && chocolate()) {
                 adjustPrice((price + 1 + 2) * number);
             } else if (whippedCream()) {
-                adjustPrice((price + 1) * number)
+                adjustPrice((price + 1) * number);
             } else if (chocolate()) {
-                adjustPrice((price + 2) * number)
+                adjustPrice((price + 2) * number);
             } else {
                 adjustPrice(price * number);
             }
             display(quantity);
             TextView thankYouMessage = (TextView) findViewById(R.id.thank_you);
             thankYouMessage.setText("");
-            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "You cannot have less than 1 coffee", Toast.LENGTH_SHORT).show();
         } else {
             number--;
             String quantity = itemCount + number;
@@ -80,9 +80,9 @@ public class JustJava extends AppCompatActivity {
             if (whippedCream() && chocolate()) {
                 adjustPrice((price + 1 + 2) * number);
             } else if (whippedCream()) {
-                adjustPrice((price + 1) * number)
+                adjustPrice((price + 1) * number);
             } else if (chocolate()) {
-                adjustPrice((price + 2) * number)
+                adjustPrice((price + 2) * number);
             } else {
                 adjustPrice(price * number);
             }
@@ -102,9 +102,9 @@ public class JustJava extends AppCompatActivity {
                 if (whippedCream() && chocolate()) {
                     adjustPrice((price + 1 + 2) * number);
                 } else if (whippedCream()) {
-                    adjustPrice((price + 1) * number)
+                    adjustPrice((price + 1) * number);
                 } else if (chocolate()) {
-                    adjustPrice((price + 2) * number)
+                    adjustPrice((price + 2) * number);
                 } else {
                     adjustPrice(price * number);
                 }
@@ -121,7 +121,7 @@ public class JustJava extends AppCompatActivity {
                     startActivity(intent);
                 }
 
-                thankYouMessage.setText("Thank you for your order, " + name()
+                thankYouMessage.setText("Thank you for your order, " + name());
                 number = 0;
                 String quantity = itemCount + number;
                 display(quantity);
